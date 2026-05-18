@@ -12,3 +12,7 @@ spring:
     username: product
     password: product
     driverClassName: org.postgresql.Driver
+
+services:
+  reviews:
+    base-url: http://localhost:8084

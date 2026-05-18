@@ -30,4 +30,6 @@ public class BookingRequestResponseDto {
     private LocalDateTime updatedAt;
     private LocalDateTime respondedAt;
     private LocalDateTime cancelledAt;
+    private Boolean hasTravelerReview;
+    private Boolean hasHostReview;
 }

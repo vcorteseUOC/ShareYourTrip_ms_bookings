@@ -29,8 +29,8 @@ public class SecurityConfiguration {
                 throws jakarta.servlet.ServletException, java.io.IOException {
 
             // Validar que la petición viene del gateway
-            String userId = request.getHeader("X-User-Id");
-            if (userId == null || userId.isEmpty()) {
+            String gatewayRequest = request.getHeader("X-Gateway-Request");
+            if (gatewayRequest == null || !gatewayRequest.equals("true")) {
                 response.setStatus(jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("{\"error\": \"Acceso denegado: petición no autorizada\"}");
                 return;

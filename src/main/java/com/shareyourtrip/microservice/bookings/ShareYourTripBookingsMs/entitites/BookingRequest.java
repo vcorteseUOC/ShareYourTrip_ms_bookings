@@ -1,5 +1,6 @@
 package com.shareyourtrip.microservice.bookings.ShareYourTripBookingsMs.entitites;
 
+import com.shareyourtrip.microservice.bookings.ShareYourTripBookingsMs.mappers.BookingRequestStatusConverter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -44,7 +45,6 @@ public class BookingRequest {
     private LocalDate endDate;
 
     @NotNull
-    @Min(1)
     @Column(name = "guests_count", nullable = false)
     @Builder.Default
     private Integer guestsCount = 1;
@@ -53,7 +53,7 @@ public class BookingRequest {
     private String message;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = BookingRequestStatusConverter.class)
     @Column(name = "status", nullable = false, length = 30)
     @Builder.Default
     private BookingRequestStatus status = BookingRequestStatus.PENDING;

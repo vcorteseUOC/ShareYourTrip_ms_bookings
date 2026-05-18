@@ -2,6 +2,7 @@ package com.shareyourtrip.microservice.bookings.ShareYourTripBookingsMs.controll
 
 import com.shareyourtrip.microservice.bookings.ShareYourTripBookingsMs.dtos.BookingRequestDto;
 import com.shareyourtrip.microservice.bookings.ShareYourTripBookingsMs.dtos.BookingRequestResponseDto;
+import com.shareyourtrip.microservice.bookings.ShareYourTripBookingsMs.dtos.UserBookingStatsDto;
 import com.shareyourtrip.microservice.bookings.ShareYourTripBookingsMs.services.BookingRequestService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/booking-requests")
@@ -38,6 +40,29 @@ public class BookingRequestController {
         return bookingRequestService.findByHostId(hostId);
     }
 
+    @GetMapping("/accommodations")
+    public Map<Long, List<Long>> getBookingRequestIdsByAccommodationIds(@RequestParam("accommodationIds") List<Long> accommodationIds) {
+        return bookingRequestService.getBookingRequestIdsByAccommodationIds(accommodationIds);
+    }
+
+    @GetMapping("/accommodation/{accommodationId}")
+    public List<BookingRequestResponseDto> findByAccommodationId(
+        @PathVariable Long accommodationId,
+        @RequestParam(required = false) String checkIn,
+        @RequestParam(required = false) String checkOut
+    ) {
+        return bookingRequestService.findByAccommodationId(accommodationId, checkIn, checkOut);
+    }
+
+    @GetMapping("/accommodations/details")
+    public Map<Long, List<BookingRequestResponseDto>> findByAccommodationIds(
+        @RequestParam("accommodationIds") List<Long> accommodationIds,
+        @RequestParam(required = false) String checkIn,
+        @RequestParam(required = false) String checkOut
+    ) {
+        return bookingRequestService.findByAccommodationIds(accommodationIds, checkIn, checkOut);
+    }
+
     @PatchMapping("/{id}/accept")
     public BookingRequestResponseDto accept(@PathVariable Long id) {
         return bookingRequestService.accept(id);
@@ -51,5 +76,10 @@ public class BookingRequestController {
     @PatchMapping("/{id}/cancel")
     public BookingRequestResponseDto cancel(@PathVariable Long id) {
         return bookingRequestService.cancel(id);
+    }
+
+    @GetMapping("/stats/{userId}")
+    public UserBookingStatsDto getUserBookingStats(@PathVariable Long userId) {
+        return bookingRequestService.getUserBookingStats(userId);
     }
 }
